@@ -117,7 +117,7 @@
                 <econdition field-name="productName"/>
             </entity-find>
             <if condition="!productList">
-                <service-call name="mantle.Product.ProductServices.create#Product" in-map="context"
+                <service-call name="mantle.training.TrainigServices.create#Product" in-map="context"
                               out-map="productDetails"/>
                 <set field="productId" from="productDetails.productId"/>
                 <else>

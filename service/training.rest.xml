@@ -2,23 +2,23 @@
     <resource name="Product" require-authentication="anonymous-all">
 
         <method type="get">
-            <service name="mantle.Product.ProductServices.get#Product"/>
+            <service name="mantle.training.TrainingServices.get#Product"/>
         </method>
 
         <method type="post">
-            <service name="mantle.Product.ProductServices.create#Product"/>
+            <service name="mantle.training.TrainingServices.create#Product"/>
         </method>
 
         <method type="patch">
-            <service name="mantle.Product.ProductServices.update#Product"/>
+            <service name="mantle.training.TrainingServices.update#Product"/>
         </method>
 
         <id name="productId">
             <method type="delete">
-                <service name="mantle.Product.ProductServices.delete#Product"/>
+                <service name="mantle.training.TrainingServices.delete#Product"/>
             </method>
             <method type="get">
-                <service name="mantle.Product.ProductServices.get#ProductOne"/>
+                <service name="mantle.training.TrainingServices.get#ProductOne"/>
             </method>
         
         </id>
