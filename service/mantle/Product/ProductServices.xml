@@ -41,11 +41,6 @@
         <actions>
             <if condition="productId == null">
                 <then>
-                    <entity-find entity-name="Product" list="productDetailList">
-                        <select-field field-name="productId"/>
-                        <select-field field-name="productName"/>
-                        <select-field field-name="description"/>
-                    </entity-find>
                     <entity-find entity-name="ProductPrice" list="productPriceList">
                         <select-field field-name="productId"/>
                         <select-field field-name="price"/>
