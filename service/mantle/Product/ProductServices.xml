@@ -24,60 +24,18 @@
     </service>
 
 
-    <service verb="get" noun="Product">
-        <description>To get details of specific product or of all the products</description>
+     <service verb="get" noun="ProductOne">
+        <description>To get the details of a specific</description>
         <in-parameters>
-            <parameter name="productId"/>
+            <parameter name="productId" required="true"/>
         </in-parameters>
         <out-parameters>
             <parameter name="productId"/>
             <parameter name="description"/>
             <parameter name="productName"/>
             <parameter name="price"/>
-            <parameter name="products"/>
-
-
         </out-parameters>
         <actions>
-            <if condition="productId == null">
-                <then>
-                    <entity-find entity-name="ProductPrice" list="productPriceList">
-                        <select-field field-name="productId"/>
-                        <select-field field-name="price"/>
-                        <select-field field-name="priceUomId"/>
-                    </entity-find>
-                    <set field="productsList" from="[]"/>
-                    <iterate list="productPriceList" entry="ProductPrices">
-                        <entity-find-one entity-name="mantle.product.Product" value-field="Products">
-                            <field-map field-name="productId" from="ProductPrices.productId"/>
-                        </entity-find-one>
-
-                        <set field="tempList" from="[]"/>
-
-                        <script>
-                            tempList.add(Products.productId)
-                            tempList.add(Products.productName)
-                            tempList.add(Products.description)
-                            tempList.add(ProductPrices.price)
-                            tempList.add(ProductPrices.priceUomId)
-                            productsList.add(tempList)
-                        </script>
-
-                    </iterate>
-                    <set field="products" from="productsList"/>
-                    <return/>
-                </then>
-                <else>
-
-                    <entity-find-one entity-name="mantle.product.Product" value-field="product"/>
-                    <set field="productId" from="product.productId"/>
-                    <set field="description" from="product.description"/>
-                    <set field="productName" from="product.productName"/>
-                    <entity-find-one entity-name="mantle.product.ProductPrice" value-field="productPrice"/>
-                    <set field="price" from="productPrice.price"/>
-                    <set field="priceUomId" from="productPrice.priceUomId"/>
-                </else>
-            </if>
             <entity-find-one entity-name="mantle.product.Product" value-field="product"/>
             <set field="productId" from="product.productId"/>
             <set field="description" from="product.description"/>
@@ -85,6 +43,48 @@
             <entity-find-one entity-name="mantle.product.ProductPrice" value-field="productPrice"/>
             <set field="price" from="productPrice.price"/>
             <set field="priceUomId" from="productPrice.priceUomId"/>
+        </actions>
+    </service>
+
+
+    <service verb="get" noun="Product">
+        <description>To get details of all the products</description>
+
+        <out-parameters>
+            <parameter name="products"/>
+        </out-parameters>
+        <actions>
+
+            <entity-find entity-name="Product" list="productDetailList">
+                <select-field field-name="productId"/>
+                <select-field field-name="productName"/>
+                <select-field field-name="description"/>
+            </entity-find>
+            <entity-find entity-name="ProductPrice" list="productPriceList">
+                <select-field field-name="productId"/>
+                <select-field field-name="price"/>
+                <select-field field-name="priceUomId"/>
+            </entity-find>
+            <set field="productsList" from="[]"/>
+            <iterate list="productPriceList" entry="ProductPrices">
+                <entity-find-one entity-name="mantle.product.Product" value-field="Products">
+                    <field-map field-name="productId" from="ProductPrices.productId"/>
+                </entity-find-one>
+
+                <set field="tempList" from="[]"/>
+
+                <script>
+                    tempList.add(Products.productId)
+                    tempList.add(Products.productName)
+                    tempList.add(Products.description)
+                    tempList.add(ProductPrices.price)
+                    tempList.add(ProductPrices.priceUomId)
+                    productsList.add(tempList)
+                </script>
+
+            </iterate>
+            <set field="products" from="productsList"/>
+            <return/>
 
         </actions>
     </service>
