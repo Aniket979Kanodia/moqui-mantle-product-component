@@ -74,12 +74,8 @@
                 <set field="tempList" from="[]"/>
 
                 <script>
-                    tempList.add(Products.productId)
-                    tempList.add(Products.productName)
-                    tempList.add(Products.description)
-                    tempList.add(ProductPrices.price)
-                    tempList.add(ProductPrices.priceUomId)
-                    productsList.add(tempList)
+                    Map tempMap = [productId:Products.productId,productName:Products.productName,description:Products.description,price:ProductPrices.price,priceUomId:ProductPrices.priceUomId]
+                    productsList.add(tempMap)
                 </script>
 
             </iterate>
