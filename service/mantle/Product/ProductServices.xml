@@ -71,12 +71,9 @@
                     <field-map field-name="productId" from="ProductPrices.productId"/>
                 </entity-find-one>
 
-                <set field="tempList" from="[]"/>
-
-                <script>
-                    Map tempMap = [productId:Products.productId,productName:Products.productName,description:Products.description,price:ProductPrices.price,priceUomId:ProductPrices.priceUomId]
-                    productsList.add(tempMap)
-                </script>
+                <set field="tempMap" from="[productId:Products.productId,productName:Products.productName,description:Products.description,price:ProductPrices.price,priceUomId:ProductPrices.priceUomId]
+"/>
+                <set field="productsList" from="productsList + tempMap"/>
 
             </iterate>
             <set field="products" from="productsList"/>
