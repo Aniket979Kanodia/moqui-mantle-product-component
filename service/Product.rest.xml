@@ -14,7 +14,9 @@
         </method>
 
         <id name="productId">
-            <method type="delete"><service name="mantle.Product.ProductServices.delete#Product"/></method>
+            <method type="delete">
+                <service name="mantle.Product.ProductServices.delete#Product"/>
+            </method>
             <method type="get">
                 <service name="mantle.Product.ProductServices.get#ProductOne"/>
             </method>
