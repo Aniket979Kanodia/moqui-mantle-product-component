@@ -49,7 +49,7 @@
         <description>To get details of all the products</description>
 
         <out-parameters>
-            <parameter name="products"/>
+            <parameter name="products" type="list"/>
         </out-parameters>
         <actions>
         <entity-find entity-name="Product" list="productsList">
