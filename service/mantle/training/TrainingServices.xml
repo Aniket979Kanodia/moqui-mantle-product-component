@@ -37,11 +37,11 @@
             <set field="productId" from="product.productId"/>
             <set field="description" from="product.description"/>
             <set field="productName" from="product.productName"/>
-            <entity-find-one entity-name="mantle.product.ProductPrice" value-field="productPrice">
-                <field-map field-name="productId" from="product.productId"/>
-            </entity-find-one>
-            <set field="price" from="productPrice.price"/>
-            <set field="priceUomId" from="productPrice.priceUomId"/>
+            <entity-find entity-name="mantle.product.ProductPrice" list="productPrice">
+                <econdition field-name="productId" from="productId"/>
+            </entity-find>
+            <set field="price" from="productPrice.price[0]"/>
+            <set field="priceUomId" from="productPrice.priceUomId[0]"/>
         </actions>
     </service>
 
