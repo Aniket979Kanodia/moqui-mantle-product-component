@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
 
 
     <service verb="create" noun="Product" displayName="Create a product" allow-remote="true">
         <description>To add details of new product in respective table</description>
         <in-parameters>
             <parameter name="productName" required="true"/>
-            <parameter name="price" required="true"/>
+            <parameter name="price" required="true" type="BigDecimal"/>
             <parameter name="description"/>
             <parameter name="priceUomId" default-value="USD"/>
         </in-parameters>
@@ -18,13 +17,11 @@
         <actions>
             <service-call name="create#mantle.product.Product" in-map="context" out-map="context"/>
 
-            <service-call name="create#mantle.product.ProductPrice" in-map="context + [productId:productId]"
-                          out-map="context"/>
+            <service-call name="create#mantle.product.ProductPrice" in-map="context + [productId:productId]" out-map="context"/>
         </actions>
     </service>
 
-
-     <service verb="get" noun="ProductOne">
+    <service verb="get" noun="Product">
         <description>To get the details of a specific</description>
         <in-parameters>
             <parameter name="productId" required="true"/>
@@ -40,22 +37,22 @@
             <set field="productId" from="product.productId"/>
             <set field="description" from="product.description"/>
             <set field="productName" from="product.productName"/>
-            <entity-find-one entity-name="mantle.product.ProductPrice" value-field="productPrice"/>
+            <entity-find-one entity-name="mantle.product.ProductPrice" value-field="productPrice">
+                <field-map field-name="productId" from="product.productId"/>
+            </entity-find-one>
             <set field="price" from="productPrice.price"/>
             <set field="priceUomId" from="productPrice.priceUomId"/>
         </actions>
     </service>
 
-
-    <service verb="get" noun="Product">
+    <service verb="get" noun="Products">
         <description>To get details of all the products</description>
 
         <out-parameters>
             <parameter name="products"/>
         </out-parameters>
         <actions>
-
-            <entity-find entity-name="Product" list="productDetailList">
+        <entity-find entity-name="Product" list="productsList">
                 <select-field field-name="productId"/>
                 <select-field field-name="productName"/>
                 <select-field field-name="description"/>
@@ -65,24 +62,28 @@
                 <select-field field-name="price"/>
                 <select-field field-name="priceUomId"/>
             </entity-find>
-            <set field="productsList" from="[]"/>
-            <iterate list="productPriceList" entry="ProductPrices">
-                <entity-find-one entity-name="mantle.product.Product" value-field="Products">
-                    <field-map field-name="productId" from="ProductPrices.productId"/>
-                </entity-find-one>
-
-                <set field="tempMap" from="[productId:Products.productId,productName:Products.productName,description:Products.description,price:ProductPrices.price,priceUomId:ProductPrices.priceUomId]
+            <set field="products" from="[]"/>
+            <iterate list="productsList" entry="product">
+                <entity-find entity-name="ProductPrice" list="productsPriceList">
+                    <econdition field-name="productId" value="${product.productId}"/>
+                </entity-find>
+                <if condition="!productsPriceList.isEmpty()">
+                    <iterate list="productsPriceList" entry="productPrice">
+                        <set field="productMap" from="[productId:product.productId,productName:product.productName,description:product.description,price:productPrice.price,priceUomId:productPrice.priceUomId]
 "/>
-                <set field="productsList" from="productsList + tempMap"/>
-
+                        <set field="products" from="products + productMap"/>
+                    </iterate>
+                    <else>
+                        <set field="productMap" from="[productId:product.productId,productName:product.productName,description:product.description,]"/>
+                        <set field="products" from="products + productMap"/>
+                    </else>
+                </if>
             </iterate>
             <set field="products" from="productsList"/>
             <return/>
 
         </actions>
     </service>
-
-
 
     <service verb="delete" noun="Product">
         <description>To delete product details based on productId</description>
@@ -93,13 +94,10 @@
             <entity-find entity-name="ProductPrice" limit="1" list="ProductPriceList">
                 <econdition field-name="productId" from="productId"/>
             </entity-find>
-            <service-call name="delete#mantle.product.ProductPrice" in-map="context+[productPriceId:ProductPriceList[0].productPriceId]"
-                          out-map="context"/>
-            <service-call name="delete#mantle.product.Product" in-map="context+[productId:productId]"
-                          out-map="context"/>
+            <service-call name="delete#mantle.product.ProductPrice" in-map="context+[productPriceId:ProductPriceList[0].productPriceId]" out-map="context"/>
+            <service-call name="delete#mantle.product.Product" in-map="context+[productId:productId]" out-map="context"/>
         </actions>
     </service>
-
 
     <service verb="update" noun="Product" displayName="Update/Create a product">
         <description>To update a particular record or create new</description>
@@ -117,13 +115,11 @@
                 <econdition field-name="productName"/>
             </entity-find>
             <if condition="!productList">
-                <service-call name="mantle.training.TrainigServices.create#Product" in-map="context"
-                              out-map="productDetails"/>
+                <service-call name="mantle.training.TrainigServices.create#Product" in-map="context" out-map="productDetails"/>
                 <set field="productId" from="productDetails.productId"/>
                 <else>
                     <set field="productId" value="${productList.productId[0]}"/>
-                    <service-call name="update#mantle.product.Product" in-map="context+[productId:productId]"
-                                  out-map="context"/>
+                    <service-call name="update#mantle.product.Product" in-map="context+[productId:productId]" out-map="context"/>
                     <entity-find entity-name="mantle.product.ProductPrice" list="priceList">
                         <econdition field-name="productId" value="${productId}"/>
                     </entity-find>

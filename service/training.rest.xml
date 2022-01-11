@@ -1,5 +1,5 @@
-<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-2.1.xsd" name="Product" displayName="Product REST API" version="2.0.0">
-    <resource name="Product" require-authentication="anonymous-all">
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-2.1.xsd" name="product" displayName="Product REST API" version="2.0.0">
+    <resource name="product" require-authentication="anonymous-all">
 
         <method type="get">
             <service name="mantle.training.TrainingServices.get#Product"/>
@@ -15,10 +15,10 @@
 
         <id name="productId">
             <method type="delete">
-                <service name="mantle.training.TrainingServices.delete#Product"/>
+                <service name="mantle.training.TrainingServices.delete#Products"/>
             </method>
             <method type="get">
-                <service name="mantle.training.TrainingServices.get#ProductOne"/>
+                <service name="mantle.training.TrainingServices.get#Product"/>
             </method>
         
         </id>
