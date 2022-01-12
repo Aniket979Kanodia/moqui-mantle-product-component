@@ -1,5 +1,5 @@
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-2.1.xsd" name="product" displayName="Product REST API" version="2.0.0">
-    <resource name="product" require-authentication="anonymous-all">
+    <resource name="products" require-authentication="anonymous-all">
 
         <method type="get"><service name="mantle.training.TrainingServices.get#Product"/></method>
 
