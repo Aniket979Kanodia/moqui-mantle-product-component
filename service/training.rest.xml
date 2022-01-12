@@ -1,0 +1,16 @@
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-2.1.xsd" name="product" displayName="Product REST API" version="2.0.0">
+    <resource name="products" require-authentication="anonymous-all">
+
+        <method type="get"><service name="mantle.training.TrainingServices.get#Product"/></method>
+
+        <method type="post"><service name="mantle.training.TrainingServices.create#Product"/></method>
+
+        <method type="patch"><service name="mantle.training.TrainingServices.update#Product"/></method>
+ 
+        <id name="productId">
+            <method type="delete"><service name="mantle.training.TrainingServices.delete#Products"/></method>
+            <method type="get"><service name="mantle.training.TrainingServices.get#Product"/></method>
+        </id>
+
+    </resource>
+</resource>
